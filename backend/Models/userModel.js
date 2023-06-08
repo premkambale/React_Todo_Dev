@@ -1,8 +1,12 @@
 
 const mongoose = require('mongoose')
 
+// by using this schema data will stored in this format in mongodb
 const userSchema = mongoose.Schema({
-    userName: {
+    firstName: {
+        type: String,
+        required: true
+    },lastName : {
         type: String,
         required: true
     },
@@ -18,6 +22,7 @@ const userSchema = mongoose.Schema({
         type: Number,
         required: true
     },
+    
 })
 
 module.exports = mongoose.model('user', userSchema);

@@ -1,30 +1,41 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const userDB = require('../Models/userModel')
-const jwt = require('jsonwebtoken')
-const bcrypt = require('bcrypt')
+const userDB = require("../Models/userModel");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const {
+  validateRegistration,
+} = require("../Validations/registrationValidations");
 
 
-router.post('/', async (req, res) => {
-    async function getHashedPassword(password) {
-        const salt = await bcrypt.genSalt(10);
-        return await bcrypt.hash(password, salt);
-    }
+router.post("/registration", async (req, res) => {
+  const { error, value } = validateRegistration(req.body);
 
-    const newUser = new userDB({
-        userName: req.body.userName,
-        password: await getHashedPassword(req.body.password),
-        confirmPassword: req.body.confirmPassword,
-        email: req.body.email,
-        mobileNo: req.body.mobileNo
-    })
+  if (error) {
+    console.log(error);
+    return res.send(error.details[0]);
+  }
 
-    try {
-        const postedUserData = await newUser.save();
-        res.send(postedUserData)
-    } catch (err) {
-        res.send({ message: err })
-    }
-})
+  async function getHashedPassword(password) {
+    const salt = await bcrypt.genSalt(10);
+    return await bcrypt.hash(password, salt);
+  }
+
+  const newUser = new userDB({
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    password: await getHashedPassword(req.body.password),
+    confirmPassword: req.body.confirmPassword,
+    email: req.body.email,
+    mobileNo: req.body.mobileNo,
+  });
+
+  try {
+    const postedUserData = await newUser.save();
+    res.send(postedUserData);
+  } catch (err) {
+    res.send({ message: err.message });
+  }
+});
 
 module.exports = router;

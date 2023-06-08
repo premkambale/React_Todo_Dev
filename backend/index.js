@@ -14,7 +14,7 @@ const userRoutes = require('./Routes/userRoutes')
 // middleware 
 app.use(bodyParser.json())      // middleware to converte HTTP req body to json
 app.use(cors())
-app.use('/registration', userRoutes)
+app.use('/user', userRoutes)
 
 
 // start server 
