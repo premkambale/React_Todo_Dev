@@ -8,6 +8,7 @@ const userController=require('../Controller/userController')
 
 // register new user
 router.post("/registration",userController.registerUser );
+router.get('/login',userController.loginUser)
 
 // login existing user
 router.get('/login',)
