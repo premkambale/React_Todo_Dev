@@ -31,17 +31,20 @@ const registerUser = async (req, res) => {
 
   try {
     var postedUserData = await newUser.save();
-    postedUserData = JSON.parse(JSON.stringify(postedUserData));
-    postedUserData.message = "user created successfully";
-    postedUserData.password = undefined;
-    res.send(postedUserData);
+    var data = {
+      message: "user Registered successfully",
+      success: true
+    };
+
+    res.send(data);
   } catch (err) {
     res.send({ message: err.message });
   }
 };
 
 const loginUser = async (req, res) => {
-  res.send("logged in");
+
+  res.send({ data: req.body });
 };
 
 module.exports = { registerUser, loginUser };
