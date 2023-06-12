@@ -3,12 +3,14 @@ const {
 } = require("../Validations/registrationValidations");
 const bcrypt = require("bcrypt");
 const userDB = require("../Models/userModel");
+const jwt = require('jsonwebtoken');
+const secretKey = "task-management"
+
 
 const registerUser = async (req, res) => {
   const { error, value } = validateRegistration(req.body);
 
   if (error) {
-    console.log(error);
     return res.status(401).send(error.details[0]);
   }
 
@@ -27,6 +29,7 @@ const registerUser = async (req, res) => {
     confirmPassword: req.body.confirmPassword,
     email: req.body.email,
     mobileNo: req.body.mobileNo,
+    date: new Date()
   });
 
   try {
@@ -44,7 +47,27 @@ const registerUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
 
-  res.send({ data: req.body });
+  const userData = await userDB.findOne({ email: req.body.email })
+
+  if (userData) {
+    bcrypt.compare(req.body.password, userData.password, (err, data) => {
+
+      if (err)
+        return res.send(err)
+
+      if (data) {
+        jwt.sign({ id: userData._id }, secretKey, { expiresIn: "1h" }, (err, token) => {
+
+          const decode = jwt.verify(token, secretKey);
+          res.json({ success: true, decode })
+
+        })
+      } else
+        return res.send({ message: 'Invalid Password' });
+    })
+  } else {
+    return res.send({ message: 'User does not exist' })
+  }
 };
 
 module.exports = { registerUser, loginUser };
