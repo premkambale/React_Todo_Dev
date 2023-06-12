@@ -3,9 +3,8 @@ const {
 } = require("../Validations/registrationValidations");
 const bcrypt = require("bcrypt");
 const userDB = require("../Models/userModel");
-const jwt = require('jsonwebtoken');
-const secretKey = "task-management"
-
+const jwt = require("jsonwebtoken");
+const secretKey = "task-management";
 
 const registerUser = async (req, res) => {
   const { error, value } = validateRegistration(req.body);
@@ -29,14 +28,14 @@ const registerUser = async (req, res) => {
     confirmPassword: req.body.confirmPassword,
     email: req.body.email,
     mobileNo: req.body.mobileNo,
-    date: new Date()
+    date: new Date(),
   });
 
   try {
     var postedUserData = await newUser.save();
     var data = {
       message: "user Registered successfully",
-      success: true
+      success: true,
     };
 
     res.send(data);
@@ -46,39 +45,38 @@ const registerUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
-
-  const userData = await userDB.findOne({ email: req.body.email })
+  const userData = await userDB.findOne({ email: req.body.email });
 
   if (userData) {
     bcrypt.compare(req.body.password, userData.password, (err, data) => {
-
-      if (err)
-        return res.send(err)
+      if (err) return res.send(err);
 
       if (data) {
-        jwt.sign({ id: userData._id }, secretKey, { expiresIn: "1h" }, (err, token) => {
-
-          const decode = jwt.verify(token, secretKey);
-          res.json({ success: true, decode })
-
-        })
-      } else
-        return res.send({ message: 'Invalid Password' });
-    })
+        jwt.sign(
+          { id: userData._id },
+          secretKey,
+          { expiresIn: "1h" },
+          (err, token) => {
+            // const decode = jwt.verify(token, secretKey);
+            res.json({ success: true, token });
+          }
+        );
+      } else return res.send({ message: "Invalid Password" });
+    });
   } else {
-    return res.send({ message: 'User does not exist' })
+    return res.send({ message: "User does not exist" });
   }
 };
 
+ 
 
-const verifyToken = (req,res,next)=>{}
+const getProfile = async (req, res) => {
 
-const getProfile = async (req,res)=>{
+  const user =await  userDB.findOne({_id : req.user.id})
+  user.password = undefined;
+  
+  console.log(user);
+  res.status(200).send(user);
+};
 
-  // console.log(req.);
-  res.status(200).send('profile data accessed')
-
-
-}
-
-module.exports = { registerUser, loginUser , getProfile };
+module.exports = { registerUser, loginUser, getProfile };
