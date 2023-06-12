@@ -43,8 +43,7 @@ const registerUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
-
-  res.send({ data: req.body });
+  res.send("logged in");
 };
 
 
@@ -52,7 +51,7 @@ const verifyToken = (req,res,next)=>{}
 
 const getProfile = async (req,res)=>{
 
-  console.log(req.);
+  // console.log(req.);
   res.status(200).send('profile data accessed')
 
 
