@@ -44,4 +44,15 @@ const loginUser = async (req, res) => {
   res.send("logged in");
 };
 
-module.exports = { registerUser, loginUser };
+
+const verifyToken = (req,res,next)=>{}
+
+const getProfile = async (req,res)=>{
+
+  console.log(req.);
+  res.status(200).send('profile data accessed')
+
+
+}
+
+module.exports = { registerUser, loginUser , getProfile };

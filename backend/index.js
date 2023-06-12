@@ -23,6 +23,10 @@ app.listen(portNo, () => {
     console.log(process.env.DB_CONNECTION);
 });
 
+app.get('/',(req,res)=>{
+    res.send('homepage accessed')
+})
+
 // connect nodejs to mongodb database
 mongoose.connect(process.env.DB_CONNECTION)
     .then(res => console.log("mongodb connected successfully !!!"))
