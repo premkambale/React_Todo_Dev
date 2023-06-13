@@ -2,7 +2,7 @@ const {
   validateRegistration,
 } = require("../Validations/registrationValidations");
 const bcrypt = require("bcrypt");
-const userDB = require("../Models/userModel");
+const userDB = require("../Models/authModel");
 const jwt = require("jsonwebtoken");
 const secretKey = "task-management";
 
