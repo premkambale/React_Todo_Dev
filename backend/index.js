@@ -9,15 +9,15 @@ const cors = require('cors')
 
 // routes
 const authRoutes = require('./Routes/authRoutes')
-const userRoutes = require('./Routes/userRoutes')
+const userRoutes = require('./Routes/userRoutes');
+const verifyToken = require('./Middlewares/verifyToken');
 
 
 // middleware 
 app.use(bodyParser.json())      // middleware to converte HTTP req body to json
 app.use(cors())
 app.use('/auth', authRoutes)
-app.use("/user", userRoutes)
-
+app.use("/user",verifyToken, userRoutes)
 
 
 // start server 

@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const userDB = require("../Models/authModel");
 const jwt = require("jsonwebtoken");
 const secretKey = "task-management";
+const validateLogin = require("../Validations/loginValidation");
 
 const registerUser = async (req, res) => {
   const { error, value } = validateRegistration(req.body);
@@ -45,11 +46,16 @@ const registerUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
+  const { error, value } = validateLogin(req.body);
+  if (error) {
+    return res.status(401).send(error.details[0]);
+  }
+
   const userData = await userDB.findOne({ email: req.body.email });
 
   if (userData) {
     bcrypt.compare(req.body.password, userData.password, (err, data) => {
-      if (err) return res.send(err);
+      if (err) return res.send({ err });
 
       if (data) {
         jwt.sign(
@@ -68,15 +74,4 @@ const loginUser = async (req, res) => {
   }
 };
 
- 
-
-const getProfile = async (req, res) => {
-
-  const user =await  userDB.findOne({_id : req.user.id})
-  user.password = undefined;
-  
-  console.log(user);
-  res.status(200).send(user);
-};
-
-module.exports = { registerUser, loginUser, getProfile };
+module.exports = { registerUser, loginUser };

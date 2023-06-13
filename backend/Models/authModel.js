@@ -29,5 +29,4 @@ const userRegistrationSchema = mongoose.Schema({
 
 })
 
-
 module.exports = mongoose.model('user', userRegistrationSchema);

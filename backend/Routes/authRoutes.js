@@ -2,13 +2,13 @@ const express = require("express");
 const router = express.Router();
 const userDB = require("../Models/authModel");
 const jwt = require("jsonwebtoken");
-const userController = require("../Controllers/authController");
+const authController = require("../Controllers/authController");
 
 
 
 // register new user
-router.post("/registration", userController.registerUser);
+router.post("/registration", authController.registerUser);
 // login existing user
-router.get("/login", userController.loginUser);
+router.get("/login", authController.loginUser);
 
 module.exports = router;
