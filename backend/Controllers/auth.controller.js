@@ -1,14 +1,12 @@
-const {
-  validateRegistration,
-} = require("../Validations/registrationValidations");
+const validate = require ('../Validations/index')
 const bcrypt = require("bcrypt");
 const userDB = require("../Models/authModel");
 const jwt = require("jsonwebtoken");
-const secretKey = "task-management";
-const validateLogin = require("../Validations/loginValidation");
+const secretKey = require('dotenv/config').SECRETKEY;
+// const validateLogin = require("../Validations/login.validation");
 
 const registerUser = async (req, res) => {
-  const { error, value } = validateRegistration(req.body);
+  const {error,value} = validate.loginValidation;
 
   if (error) {
     return res.status(401).send(error.details[0]);
@@ -46,7 +44,7 @@ const registerUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
-  const { error, value } = validateLogin(req.body);
+  const {error,value} = validate.loginValidation(req.body)
   if (error) {
     return res.status(401).send(error.details[0]);
   }

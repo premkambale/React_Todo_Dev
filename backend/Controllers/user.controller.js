@@ -1,24 +1,23 @@
 const userDB = require("../Models/authModel");
 
 const getProfile = async (req, res) => {
-  const user = await userDB.find();
+  // const user = await userDB.find({ _id: req.id });
+  const user = await userDB.find({ _id: req.user.id });
+
   user.password = undefined;
 
-  console.log(user);
   res.status(200).send(user);
 };
 
 const updateProfile = async (req, res) => {
-  // console.log(req.body);
+  console.log(req.params);
 
   try {
     if (req.body) {
       const updatedData = await userDB.updateOne(
-        { _id: req.user.id },
+        { _id: req.params.id },
         {
-          $set: {
-            firstName: req.body.firstName,
-          },
+          $set: req.body,
         }
       );
 

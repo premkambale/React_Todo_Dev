@@ -6,13 +6,16 @@ const verifyToken = (req, res, next) => {
 
   if (authHeader) {
     jwt.verify(authHeader, "task-management", (err, user) => {
-      if (err) return res.status(403).send("Invalid token");
+      if (err) {
+        return res.status(403).send("Invalid token");
+      }
+      // console.log(req.route.path);
+      // req.id = req.route.path;
 
-      req.user = user;
       next();
     });
   } else {
-    res.send(401).json("user not authorised");
+    res.send(401).json("user not authorized");
   }
 };
 
