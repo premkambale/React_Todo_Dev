@@ -1,12 +1,12 @@
-const validate = require ('../Validations/index')
+const validate = require("../Validations/index");
 const bcrypt = require("bcrypt");
 const userDB = require("../Models/authModel");
 const jwt = require("jsonwebtoken");
-const secretKey = require('dotenv/config').SECRETKEY;
+const dotenv = require("dotenv/config");
 // const validateLogin = require("../Validations/login.validation");
 
 const registerUser = async (req, res) => {
-  const {error,value} = validate.loginValidation;
+  const { error, value } = validate.registrationValidation(req.body);
 
   if (error) {
     return res.status(401).send(error.details[0]);
@@ -44,7 +44,7 @@ const registerUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
-  const {error,value} = validate.loginValidation(req.body)
+  const { error, value } = validate.loginValidation(req.body);
   if (error) {
     return res.status(401).send(error.details[0]);
   }
@@ -58,11 +58,13 @@ const loginUser = async (req, res) => {
       if (data) {
         jwt.sign(
           { id: userData._id },
-          secretKey,
+          process.env.SECRETKEY,
           { expiresIn: "1h" },
           (err, token) => {
-            // const decode = jwt.verify(token, secretKey);
-            res.json({ success: true, token });
+            userData.password = undefined;
+            userData.mobileNo = undefined
+            if (token) res.json({ success: true, token, userData });
+            else console.log(err);
           }
         );
       } else return res.send({ message: "Invalid Password" });

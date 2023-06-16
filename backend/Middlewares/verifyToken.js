@@ -9,8 +9,9 @@ const verifyToken = (req, res, next) => {
       if (err) {
         return res.status(403).send("Invalid token");
       }
-      // console.log(req.route.path);
-      // req.id = req.route.path;
+
+      console.log(req.method);
+      if (req.url == "/profile" && req.method == "GET") req.id = user.id;
 
       next();
     });
