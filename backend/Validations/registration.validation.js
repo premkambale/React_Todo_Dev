@@ -6,17 +6,15 @@ const validator = (schema) => (payload) =>
 const registrationSchema = joi.object({
   firstName: joi
     .string()
+    .trim()
     .required()
     .regex(/^[a-zA-Z]+$/)
     .messages({
       "string.pattern.base": "Username contain only characters.",
     }),
-  lastName: joi.string().required(),
+  lastName:   joi.any().equal(joi.ref('firstName')),
   password: joi.string().min(4),
-  confirmPassword: joi
-    .valid(joi.ref("password"))
-    .label("Confirm pa ssword")
-    .messages({ "any.only": `confirm password does not match` }),
+  confirmPassword: joi.valid(joi.ref("password")),
   email: joi.string().email().required(),
   mobileNo: joi
     .string()
@@ -24,4 +22,4 @@ const registrationSchema = joi.object({
     .messages({ "string.pattern.base": `Phone number must have 10 digits.` }),
 });
 
-exports.validateRegistration = validator(registrationSchema);
+module.exports = validator(registrationSchema);
