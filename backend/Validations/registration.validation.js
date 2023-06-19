@@ -12,9 +12,11 @@ const registrationSchema = joi.object({
     .messages({
       "string.pattern.base": "Username contain only characters.",
     }),
-  lastName:   joi.any().equal(joi.ref('firstName')),
-  password: joi.string().min(4),
-  confirmPassword: joi.valid(joi.ref("password")),
+  lastName: joi.any().not(joi.ref("firstName")),
+  password: joi.string().min(4).required(),
+  confirmPassword: joi.equal(joi.ref("password")).messages({
+    "any.only": "password and confirm password do not match.",
+  }).required(),
   email: joi.string().email().required(),
   mobileNo: joi
     .string()
