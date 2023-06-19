@@ -8,7 +8,7 @@ const userRegistrationSchema = mongoose.Schema({
         required: true
     }, lastName: {
         type: String,
-        required: true
+        // required: true
     },
     password: {
         type: String,
@@ -20,7 +20,7 @@ const userRegistrationSchema = mongoose.Schema({
     },
     mobileNo: {
         type: Number,
-        required: true
+        // required: true
     },
     date : {
         type : String,
