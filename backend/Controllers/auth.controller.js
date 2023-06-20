@@ -7,30 +7,34 @@ const validate = require('../Middlewares/validate')
 const authValidation = require('../Validations/auth.validation')
 
 const registerUser = async (req, res) => {
-  // const { error, value } = validate.registrationValidation(req.body);
-  const { error, value } = validate(authValidation.register);
+  const { error, value } = validate(authValidation.register)(req.body);
 
   if (error) {
-    return res.status(401).send(error.details[0]);
+    return res.status(400).send(error.details[0]);
   }
 
   if (await database.registrationCollection.findOne({ email: req.body.email }))
-    return res.send({ message: "user registered already with this email-id" });
+    return res.status(409).send({ message: "user registered already with this email-id" });
 
   async function getHashedPassword(password) {
-    const salt = await bcrypt.genSalt(10);
-    return await bcrypt.hash(password, salt);
+    // const salt = await bcrypt.genSalt(10);
+    return await bcrypt.hash(password, 10);
   }
 
-  const newUser = new database.registrationCollection({
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    password: await getHashedPassword(req.body.password),
-    confirmPassword: req.body.confirmPassword,
-    email: req.body.email,
-    mobileNo: req.body.mobileNo,
-    date: new Date(),
-  });
+  const payload={...req.body, date: new Date(),...value}
+  payload.password=await getHashedPassword(req.body.password)
+ 
+  const newUser = new database.registrationCollection(payload)
+
+  // const newUser = new database.registrationCollection({
+  //   firstName: req.body.firstName,
+  //   lastName: req.body.lastName,
+  //   password: await getHashedPassword(req.body.password),
+  //   confirmPassword: req.body.confirmPassword,
+  //   email: req.body.email,
+  //   mobileNo: req.body.mobileNo,
+  //   date: new Date(),
+  // });
 
   try {
     var postedUserData = await newUser.save();
@@ -48,7 +52,7 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
   // const { error, value } = validate.loginValidation(req.body);
 
-  const { error, value } = validate(authValidation.login);
+  const { error, value } = validate(authValidation.login)(req.body)
 
   if (error) {
     return res.status(401).send(error.details[0]);  

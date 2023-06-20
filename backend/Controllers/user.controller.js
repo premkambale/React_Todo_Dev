@@ -1,43 +1,29 @@
 const validate = require("../Middlewares/validate");
-const userDB = require("../Models/authModel");
-const authValidation = require('../Validations/auth.validation');
-const userValidation = require("../Validations/user.validation");
-
-
-// function validateUserInfo(req,res) {
-//   const {error,value} = validate.userValidation(req.body)
-
-//   if(error)
-//  return  res.status(400).send(error)
-// }
+const { registrationCollection } = require("../Models");
+const { userValidation } = require("../Validations");
 
 const getProfile = async (req, res) => {
-  // const { error, value } = validate.userValidation(req.body);
-  const { error, value } = validate(userValidation.getUser);
-  // const user = await userDB.find({ _id: req.id });
-  // validateUserInfo(req,res)
-  if (error) return res.status(400).send(error);
-
-  var user = await userDB.findOne({ _id: req.id });
+  var user = await database.registrationCollection.findOne({ _id: req.id });
 
   user.password = undefined;
-  console.log(user);
 
   res.status(200).send(user);
 };
 
 const updateProfile = async (req, res) => {
-  // console.log(req.params);
-  // validateUserInfo(req,res)
+  const { error, value } = validate(userValidation.updateUser)(req.body);
+console.log(value)
+  if (error) return res.status(400).send(error);
 
+  
   try {
     if (req.body) {
-      const updatedData = await userDB.updateOne(
-        { _id: req.params.id },
+      const updatedData = await registrationCollection.updateOne(
+        { _id: req.id },
         {
-          $set: req.body,
+          $set: {...req.body,...value},
         }
-      );
+        );
 
       return updatedData.modifiedCount > 0
         ? res.send({ message: "profile updated successfully" })
@@ -51,7 +37,9 @@ const updateProfile = async (req, res) => {
 };
 
 const deleteProfile = async (req, res) => {
-  const deletedData = await userDB.deleteOne({ _id: req.user.id });
+  const deletedData = await database.registrationCollection.deleteOne({
+    _id: req.user.id,
+  });
 
   return deletedData.deletedCount > 0
     ? res.send({ message: "user deleted successfully" })

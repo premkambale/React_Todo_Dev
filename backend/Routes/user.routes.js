@@ -9,9 +9,10 @@ router.all("/*", verifyToken);
 router
   .route("/profile")
   .get(userController.getProfile)
+  .patch(userController.updateProfile)
   .delete(userController.deleteProfile);
 
-router.route("/profile/:id").patch(userController.updateProfile);
+// router.route("/profile/:id").patch(userController.updateProfile);
 // router.route("/profile").get(userController.getProfile).patch(userController.updateProfile).delete(userController.deleteProfile);
 
 module.exports = router;
