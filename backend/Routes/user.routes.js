@@ -6,15 +6,6 @@ const { userController } = require("../Controllers");
 
 router.all("/*", verifyToken);
 
-// get profile data
-// router.get("/profile", userController.getProfile);
-
-//update the profile
-// router.patch("/profile", userController.updateProfile);
-
-// delete profile
-// router.delete("/profile", userController.deleteProfile);
-
 router
   .route("/profile")
   .get(userController.getProfile)

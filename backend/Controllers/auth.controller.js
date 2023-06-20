@@ -1,18 +1,20 @@
-const validate = require("../Validations/index");
+// const validate = require("../Validations/index");
 const bcrypt = require("bcrypt");
-const userDB = require("../Models/authModel");
+const database = require('../Models/index')
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv/config");
-// const validateLogin = require("../Validations/login.validation");
+const validate = require('../Middlewares/validate')
+const authValidation = require('../Validations/auth.validation')
 
 const registerUser = async (req, res) => {
-  const { error, value } = validate.registrationValidation(req.body);
+  // const { error, value } = validate.registrationValidation(req.body);
+  const { error, value } = validate(authValidation.register);
 
   if (error) {
     return res.status(401).send(error.details[0]);
   }
 
-  if (await userDB.findOne({ email: req.body.email }))
+  if (await database.registrationCollection.findOne({ email: req.body.email }))
     return res.send({ message: "user registered already with this email-id" });
 
   async function getHashedPassword(password) {
@@ -20,7 +22,7 @@ const registerUser = async (req, res) => {
     return await bcrypt.hash(password, salt);
   }
 
-  const newUser = new userDB({
+  const newUser = new database.registrationCollection({
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     password: await getHashedPassword(req.body.password),
@@ -44,12 +46,15 @@ const registerUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
-  const { error, value } = validate.loginValidation(req.body);
+  // const { error, value } = validate.loginValidation(req.body);
+
+  const { error, value } = validate(authValidation.login);
+
   if (error) {
-    return res.status(401).send(error.details[0]);
+    return res.status(401).send(error.details[0]);  
   }
 
-  const userData = await userDB.findOne({ email: req.body.email });
+  const userData = await database.registrationCollection.findOne({ email: req.body.email });
 
   if (userData) {
     bcrypt.compare(req.body.password, userData.password, (err, data) => {
@@ -59,7 +64,7 @@ const loginUser = async (req, res) => {
         jwt.sign(
           { id: userData._id },
           process.env.SECRETKEY,
-          { expiresIn: "1h" },
+          { expiresIn: process.env.JWT_EXPIRES_IN },
           (err, token) => {
             userData.password = undefined;
             userData.mobileNo = undefined

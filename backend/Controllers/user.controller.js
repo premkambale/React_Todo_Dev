@@ -1,5 +1,8 @@
+const validate = require("../Middlewares/validate");
 const userDB = require("../Models/authModel");
-const validate = require("../Validations/index");
+const authValidation = require('../Validations/auth.validation');
+const userValidation = require("../Validations/user.validation");
+
 
 // function validateUserInfo(req,res) {
 //   const {error,value} = validate.userValidation(req.body)
@@ -9,9 +12,10 @@ const validate = require("../Validations/index");
 // }
 
 const getProfile = async (req, res) => {
+  // const { error, value } = validate.userValidation(req.body);
+  const { error, value } = validate(userValidation.getUser);
   // const user = await userDB.find({ _id: req.id });
   // validateUserInfo(req,res)
-  const { error, value } = validate.userValidation(req.body);
   if (error) return res.status(400).send(error);
 
   var user = await userDB.findOne({ _id: req.id });
