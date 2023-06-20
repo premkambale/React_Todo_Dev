@@ -21,7 +21,6 @@ const registrationSchema = joi.object({
   mobileNo: joi
     .string()
     .length(10)
-    .messages({ "string.pattern.base": `Phone number must have 10 digits.` }),
 });
 
 module.exports = validator(registrationSchema);

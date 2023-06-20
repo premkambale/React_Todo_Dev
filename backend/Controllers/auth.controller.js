@@ -24,20 +24,18 @@ const registerUser = async (req, res) => {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     password: await getHashedPassword(req.body.password),
-    confirmPassword: req.body.confirmPassword,
     email: req.body.email,
     mobileNo: req.body.mobileNo,
     date: new Date(),
   });
 
   try {
-    var postedUserData = await newUser.save();
-    var data = {
+    await newUser.save();
+
+    res.send({
       message: "user Registered successfully",
       success: true,
-    };
-
-    res.send(data);
+    });
   } catch (err) {
     res.send({ message: err.message });
   }
@@ -64,7 +62,7 @@ const loginUser = async (req, res) => {
             userData.password = undefined;
             userData.mobileNo = undefined
             if (token) res.json({ success: true, token, userData });
-            else console.log(err);
+            else return res.json({message : err})
           }
         );
       } else return res.send({ message: "Invalid Password" });
