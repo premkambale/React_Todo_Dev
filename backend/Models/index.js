@@ -1,3 +1,4 @@
 module.exports = {
-    registrationCollection : require('./authModel')
+    userCollection : require('./auth.model'),
+    taskCollection : require('./task.model')
 }

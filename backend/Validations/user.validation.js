@@ -5,6 +5,7 @@ const updateUser = joi.object({
   lastName: joi.string().trim(),
   email: joi.string().email().trim(),
   mobileNo: joi.string().length(10).trim(),
+  tasks : joi.array()
 });
 
-module.exports = {updateUser};
+module.exports = { updateUser };

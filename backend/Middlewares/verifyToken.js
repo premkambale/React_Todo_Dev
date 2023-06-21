@@ -13,7 +13,8 @@ const verifyToken = (req, res, next) => {
         return res.status(403).send("Invalid token");
       }
 
-      if (req.url == "/profile" && req.method == "GET" || "PATCH") req.id = user.id;
+      // if (req.url == "/profile" && req.method == "GET" || "PATCH")
+       req.user_id = user.id;
 
       next();
     });
