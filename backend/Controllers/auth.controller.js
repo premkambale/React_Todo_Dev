@@ -37,13 +37,12 @@ const registerUser = async (req, res) => {
   // });
 
   try {
-    var postedUserData = await newUser.save();
-    var data = {
+    await newUser.save();
+
+    res.send({
       message: "user Registered successfully",
       success: true,
-    };
-
-    res.send(data);
+    });
   } catch (err) {
     res.send({ message: err.message });
   }
@@ -73,7 +72,7 @@ const loginUser = async (req, res) => {
             userData.password = undefined;
             userData.mobileNo = undefined
             if (token) res.json({ success: true, token, userData });
-            else console.log(err);
+            else return res.json({message : err})
           }
         );
       } else return res.send({ message: "Invalid Password" });
