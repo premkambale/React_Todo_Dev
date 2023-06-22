@@ -1,6 +1,7 @@
 const validate = require("../Middlewares/validate");
 const { projectCollection, userCollection } = require("../Models");
 const { projectValidation } = require("../Validations");
+const { user } = require("../services");
 
 const addProject = async (req, res) => {
   try {
@@ -9,7 +10,6 @@ const addProject = async (req, res) => {
     if (error) return res.status(401).send({ message: error.details[0].message });
 
     const newproject = await new projectCollection({
-      // ...req.body,
       ...value, //if data changed after validation then data will be ovverride ex: trim
       isCompleted: false,
       isPending: true,
@@ -17,7 +17,7 @@ const addProject = async (req, res) => {
     })
       .save()
       .then(async (response) => {
-        const data = await userCollection.findOne({ _id: req.user_id });
+        const data = await user.findUserById(req);
         if(data){
                 data.project.push(response._id)
                 await data.save()

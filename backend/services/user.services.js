@@ -1,13 +1,14 @@
 const { userCollection } = require("../Models");
 
-userCollection;
-
 const isEmailPresent = async (req) => {
   return await userCollection.findOne({ email: req.body.email });
 };
 
-const updateUser = async (req, value) => {
+const findUserById = async(req)=>{
+  return await userCollection.findOne({ _id: req.user_id });
+}
 
+const updateUser = async (req, value) => {
   return await userCollection.updateOne(
     { _id: req.user_id },
     {
@@ -21,8 +22,10 @@ const deleteUser = async (req)=>{
     _id: req.user.id,
   })
 }
+
 module.exports = {
   isEmailPresent,
   updateUser,
-  deleteUser
+  deleteUser,
+  findUserById
 };
