@@ -9,14 +9,20 @@ var server;
 mongoose
   .connect(process.env.DB_CONNECTION)
   .then((res) => {
-    console.log("\nmongodb connected successfully !!!");
+    console.log(
+      "----------------------------------------------------------------"
+    );
+    console.log("mongodb connected successfully !!!");
     server = app.listen(process.env.PORT_NO, () => {});
 
-    if (server)
+    if (server) {
       console.log(
-        `Server Started Successfully on port!!! ${process.env.PORT_NO}\n`
+        `Server Started Successfully on port!!! ${process.env.PORT_NO}`
       );
-    else console.log("server not started");
+      console.log(
+        "----------------------------------------------------------------"
+      );
+    } else console.log("server not started");
   })
   .catch((err) => console.log({ message: err.message }));
 

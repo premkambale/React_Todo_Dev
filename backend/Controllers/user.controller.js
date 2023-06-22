@@ -1,7 +1,7 @@
 const validate = require("../Middlewares/validate");
-const { userCollection } = require("../Models/index");
 const { userValidation } = require("../Validations");
 const userDB = require("../Models/auth.model");
+const { user } = require("../services");
 
 const getProfile = async (req, res) => {
   var user = await userDB.findOne({ _id: req.user_id });
@@ -17,15 +17,7 @@ const updateProfile = async (req, res) => {
 
   try {
     if (req.body) {
-      console.log("in up");
-      const updatedData = await userCollection.updateOne(
-        { _id: req.user_id },
-        {
-          // $set: { ...req.body, ...value },
-          $set: { ...value },
-        }
-      );
-      console.log("updatedData", updatedData);
+      const updatedData = await user.updateUser(req,value)
 
       return updatedData.modifiedCount > 0
         ? res.send({ message: "profile updated successfully" })
@@ -34,14 +26,12 @@ const updateProfile = async (req, res) => {
       return res.status(400).send({ message: "request body field is empty " });
     }
   } catch (err) {
-    return res.send({ message: err });
+    return res.send({ message: err.message });
   }
 };
 
 const deleteProfile = async (req, res) => {
-  const deletedData = await userDB.userCollection.deleteOne({
-    _id: req.user.id,
-  });
+  const deletedData = await user.deleteUser(req);
 
   return deletedData.deletedCount > 0
     ? res.send({ message: "user deleted successfully" })

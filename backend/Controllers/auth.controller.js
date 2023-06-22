@@ -1,10 +1,11 @@
 // const validate = require("../Validations/index");
 const bcrypt = require("bcrypt");
-const { userCollection } = require("../Models/index");
+const { userCollection } = require("../Models");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv/config");
 const validate = require("../Middlewares/validate");
 const authValidation = require("../Validations/auth.validation");
+const { user } = require("../services");
 
 const registerUser = async (req, res) => {
   const { error, value } = validate(authValidation.register)(req.body);
@@ -13,7 +14,9 @@ const registerUser = async (req, res) => {
     return res.status(400).send(error.details[0]);
   }
 
-  if (await userCollection.findOne({ email: req.body.email }))
+  // console.log(await user.checkEmailPresent(req));
+
+  if (await user.isEmailPresent(req))
     return res
       .status(409)
       .send({ message: "user registered already with this email-id" });
@@ -26,17 +29,7 @@ const registerUser = async (req, res) => {
   const payload = { ...req.body, ...value, date: new Date() };
   payload.password = await getHashedPassword(req.body.password);
 
-  const newUser = new userCollection(payload);
-
-  // const newUser = new userCollection({
-  //   firstName: req.body.firstName,
-  //   lastName: req.body.lastName,
-  //   password: await getHashedPassword(req.body.password),
-  //   confirmPassword: req.body.confirmPassword,
-  //   email: req.body.email,
-  //   mobileNo: req.body.mobileNo,
-  //   date: new Date(),
-  // });
+  const newUser = new userCollection(payload); 
 
   try {
     await newUser.save();
@@ -58,11 +51,11 @@ const loginUser = async (req, res) => {
     return res.status(401).send(error.details[0]);
   }
 
-  const userData = await userCollection.findOne({ email: req.body.email });
+  const userData = await user.isEmailPresent(req);
 
   if (userData) {
     bcrypt.compare(req.body.password, userData.password, (err, data) => {
-      if (err) return res.send({ err });
+      if (err) return res.send({ message : err.message});
 
       if (data) {
         jwt.sign(
