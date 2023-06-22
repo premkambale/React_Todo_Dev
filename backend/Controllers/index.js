@@ -1,5 +1,6 @@
 module.exports = {
   userController: require("./user.controller"),
   authController: require("./auth.controller"),
-  taskController: require("./task.controller"),
+  projectController: require("./project.controller"),
 };
+ 

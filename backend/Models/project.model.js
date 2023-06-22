@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
-const taskSchema = mongoose.Schema({
-  taskTitle: String,
+const projectSchema = mongoose.Schema({
+  projectTitle: String,
   description: String,
   isCompleted: Boolean,
   isPending: Boolean,
@@ -9,4 +9,4 @@ const taskSchema = mongoose.Schema({
   date: String,
 });
 
-module.exports = mongoose.model("task", taskSchema);
+module.exports = mongoose.model("project", projectSchema);

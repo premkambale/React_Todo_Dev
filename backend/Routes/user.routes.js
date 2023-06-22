@@ -3,10 +3,10 @@ const router = express.Router();
 const verifyToken = require("../Middlewares/verifyToken");
 const { userController } = require("../Controllers");
 // const authMiddleware = require('../Middlewares/authMiddleware.js')
-const taskRoutes = require('../Routes/task.routes')
+const projectRoutes = require('./project.routes')
 router.all("/*", verifyToken);
 
-router.use('/task',taskRoutes)
+router.use('/project',projectRoutes)
 
 router
   .route("/profile")

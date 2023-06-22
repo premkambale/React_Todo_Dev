@@ -17,7 +17,7 @@ const userRegistrationSchema = mongoose.Schema({
   mobileNo: {
     type: Number,
   },  
-  tasks: [{
+  project: [{
     type : mongoose.Schema.Types.ObjectId,
     ref : 'user'
   }]
