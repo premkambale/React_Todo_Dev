@@ -1,12 +1,13 @@
-const { userCollection } = require("../Models");
+const { userCollection, projectCollection } = require("../Models");
+// const {  } = require("../Models");
 
 const isEmailPresent = async (req) => {
   return await userCollection.findOne({ email: req.body.email });
 };
 
-const findUserById = async(req)=>{
+const findUserById = async (req) => {
   return await userCollection.findOne({ _id: req.user_id });
-}
+};
 
 const updateUser = async (req, value) => {
   return await userCollection.updateOne(
@@ -17,15 +18,22 @@ const updateUser = async (req, value) => {
   );
 };
 
-const deleteUser = async (req)=>{
+const getProjectListByStatus = async (req) => {
+  console.log(req.query, req.user_id);
+
+  return await projectCollection.find({ projectStatus: req.query.projectStatus });
+};
+
+const deleteUser = async (req) => {
   return await userDB.userCollection.deleteOne({
     _id: req.user.id,
-  })
-}
+  });
+};
 
 module.exports = {
   isEmailPresent,
   updateUser,
   deleteUser,
-  findUserById
+  findUserById,
+  getProjectListByStatus,
 };

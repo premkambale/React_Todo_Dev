@@ -7,7 +7,8 @@ const addProject = async (req, res) => {
   try {
     const { error, value } = validate(projectValidation.addproject)(req.body);
 
-    if (error) return res.status(401).send({ message: error.details[0].message });
+    if (error)
+      return res.status(401).send({ message: error.details[0].message });
 
     const newproject = await new projectCollection({
       ...value, //if data changed after validation then data will be ovverride ex: trim
@@ -18,22 +19,34 @@ const addProject = async (req, res) => {
       .save()
       .then(async (response) => {
         const data = await user.findUserById(req);
-        if(data){
-                data.project.push(response._id)
-                await data.save()
-            return res.status(201).send({message : 'new Project added successfully'});
-        }else {
-            return res.send({message : 'invalid token'})
+        if (data) {
+          data.project.push(response._id);
+          await data.save();
+          return res
+            .status(201)
+            .send({ message: "new Project added successfully" });
+        } else {
+          return res.send({ message: "invalid token" });
         }
       })
       .catch((err) => {
         return res.status(401).send({ message: err.message });
       });
   } catch (err) {
-    res.send(err.message)
+    res.send(err.message);
+  }
+};
+const getProjectByStatus =async (req, res) => {
+  try {
+    const SortedProjectList =await  user.getProjectListByStatus(req)
+
+    res.status(200).send(SortedProjectList)
+  } catch (err) {
+    res.send({ message: err.message });
   }
 };
 
 module.exports = {
   addProject,
+  getProjectByStatus,
 };

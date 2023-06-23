@@ -1,14 +1,13 @@
 const validate = require("../Middlewares/validate");
 const { userValidation } = require("../Validations");
-const userDB = require("../Models/auth.model");
 const { user } = require("../services");
 
 const getProfile = async (req, res) => {
-  var user = await userDB.findOne({ _id: req.user_id });
+  var userData = await user.findUserById(req);
 
-  user.password = undefined;
+  userData.password = undefined;
 
-  res.status(200).send(user);
+  res.status(200).send(userData);
 };
 
 const updateProfile = async (req, res) => {
@@ -17,7 +16,7 @@ const updateProfile = async (req, res) => {
 
   try {
     if (req.body) {
-      const updatedData = await user.updateUser(req,value)
+      const updatedData = await user.updateUser(req, value);
 
       return updatedData.modifiedCount > 0
         ? res.send({ message: "profile updated successfully" })

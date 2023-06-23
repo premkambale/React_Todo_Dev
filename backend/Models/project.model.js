@@ -9,6 +9,7 @@ const projectSchema = mongoose.Schema({
     // profile: String
   }],
   dueDate : String,
+  projectStatus : String,
 },{timestamps:true});
 
 module.exports = mongoose.model("project", projectSchema);
