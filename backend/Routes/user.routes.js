@@ -6,7 +6,7 @@ const { userController } = require("../Controllers");
 const projectRoutes = require('./project.routes')
 router.all("/*", verifyToken);
 
-router.use('/project',projectRoutes)
+router.use('/projects',projectRoutes)
 
 router
   .route("/profile")

@@ -3,13 +3,24 @@ const mongoose = require("mongoose");
 const projectSchema = mongoose.Schema({
   projectTitle: String,
   projectDescription: String,
-  projectMembers : [{
-    memberID:mongoose.Schema.Types.ObjectId,
-    name : String,
+  projectDueDate: String,
+  projectStatus: String,
+  projectMembers: [{
+    memberID: {
+      type:mongoose.Schema.Types.ObjectId,
+      ref: "user"
+    },
+    memberName: String,
     // profile: String
+
+    tasks: [{
+      taskOwnerID: mongoose.Schema.Types.ObjectId,        // i think this is unnecessary
+      taskTitle: String,
+      taskDescription: String,
+      taskDueDate: String,
+      taskStatus: String
+    }]
   }],
-  dueDate : String,
-  projectStatus : String,
-},{timestamps:true});
+}, { timestamps: true });
 
 module.exports = mongoose.model("project", projectSchema);

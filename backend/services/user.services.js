@@ -19,8 +19,7 @@ const updateUser = async (req, value) => {
 };
 
 const getProjectListByStatus = async (req) => {
-  console.log(req.query, req.user_id);
-
+  console.log(req.query.projectStatus);
   return await projectCollection.find({ projectStatus: req.query.projectStatus });
 };
 

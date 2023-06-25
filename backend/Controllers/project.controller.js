@@ -1,10 +1,11 @@
 const validate = require("../Middlewares/validate");
 const { projectCollection, userCollection } = require("../Models");
 const { projectValidation } = require("../Validations");
-const { user } = require("../services");
+const { user, projectService } = require("../services");
 
 const addProject = async (req, res) => {
   try {
+    req.body.projectStatus = "pending";
     const { error, value } = validate(projectValidation.addproject)(req.body);
 
     if (error)
@@ -36,9 +37,9 @@ const addProject = async (req, res) => {
     res.send(err.message);
   }
 };
-const getProjectByStatus =async (req, res) => {
+const getProjectByStatus = async (req, res) => {
   try {
-    const SortedProjectList =await  user.getProjectListByStatus(req)
+    const SortedProjectList = await user.getProjectListByStatus(req)
 
     res.status(200).send(SortedProjectList)
   } catch (err) {
@@ -46,7 +47,44 @@ const getProjectByStatus =async (req, res) => {
   }
 };
 
+const getProjectByID = async (req, res) => {
+  const projectData = await projectService.getProjectByID(req.params.projectId);
+  return res.send(projectData);
+}
+
+const updateProject = async (req, res) => {
+
+  try {
+    req.body.taskStatus = "pending";
+    const { error, value } = validate(projectValidation.assignNewTask)(req.body);
+    if (error)
+      return res.status(401).send({ message: error.details[0].message });
+
+    var projectData = await projectService.getProjectByID(req.params.projectId)
+    projectData = projectData[0];
+
+    var member = projectData.projectMembers.filter((members) => {
+      if (members.memberID == req.body.taskOwnerID)
+        return members;
+    })
+    const newTask = { ...req.body };
+    member[0].tasks.push(newTask)
+    const assignedTask = member[0]
+
+    const foundIndex = projectData.projectMembers.findIndex(ele => ele.memberID === assignedTask.memberID)
+    projectData.projectMembers[foundIndex] = assignedTask;
+    console.log(projectData.projectMembers[0].tasks);
+
+//projectdata = we are passing updated project data u
+    return await projectService.updateNewTask(projectData);
+  } catch (err) {
+    return res.status(401).send({ message: err.message });
+  }
+}
+
 module.exports = {
   addProject,
   getProjectByStatus,
+  getProjectByID,
+  updateProject
 };
