@@ -75,8 +75,13 @@ const updateProject = async (req, res) => {
     projectData.projectMembers[foundIndex] = assignedTask;
     console.log(projectData.projectMembers[0].tasks);
 
-//projectdata = we are passing updated project data u
-    return await projectService.updateNewTask(projectData);
+    //projectdata = we are passing updated project data 
+    const result = await projectService.updateNewTask(projectData, req.params.projectId);
+    console.log(result);
+    if (result.modifiedCount > 0)
+      return await res.status(201). send({ message: "task assigned successfully ", success: true });
+    else
+      return await res.send({ message: "project controller error " });
   } catch (err) {
     return res.status(401).send({ message: err.message });
   }

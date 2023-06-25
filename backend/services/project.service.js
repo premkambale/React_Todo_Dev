@@ -6,12 +6,8 @@ const getProjectByID = async (projectId) => {
     return await projectCollection.find({ _id: projectId })
 }
 
-const updateNewTask = async (updatedProjectData)=>{
-// now we have to upate th new project data
-    const projectData = await projectCollection.find({ _id: req.params.projectId});
-    console.log(projectData);
-
-    return projectData;
+const updateNewTask = async (updatedProjectData, projectId) => {
+    return await projectCollection.updateOne({ _id: projectId }, { $set: updatedProjectData })
 }
 
 module.exports = {
