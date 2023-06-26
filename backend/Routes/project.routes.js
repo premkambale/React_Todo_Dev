@@ -9,5 +9,7 @@ router.post('/add-project', projectController.addProject)
 
 router.route('/project/:projectId').get(projectController.getProjectByID).patch(projectController.updateProject)
 
+router.post('/project/add-task',projectController.addNewTask)
+
 
 module.exports = router;

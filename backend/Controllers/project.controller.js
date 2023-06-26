@@ -39,9 +39,9 @@ const addProject = async (req, res) => {
 };
 const getProjectByStatus = async (req, res) => {
   try {
-    const SortedProjectList = await user.getProjectListByStatus(req)
+    const SortedProjectList = await user.getProjectListByStatus(req);
 
-    res.status(200).send(SortedProjectList)
+    res.status(200).send(SortedProjectList);
   } catch (err) {
     res.send({ message: err.message });
   }
@@ -50,46 +50,61 @@ const getProjectByStatus = async (req, res) => {
 const getProjectByID = async (req, res) => {
   const projectData = await projectService.getProjectByID(req.params.projectId);
   return res.send(projectData);
-}
+};
 
 const updateProject = async (req, res) => {
-
   try {
     req.body.taskStatus = "pending";
-    const { error, value } = validate(projectValidation.assignNewTask)(req.body);
+    const { error, value } = validate(projectValidation.assignNewTask)(
+      req.body
+    );
     if (error)
       return res.status(401).send({ message: error.details[0].message });
 
-    var projectData = await projectService.getProjectByID(req.params.projectId)
+    var projectData = await projectService.getProjectByID(req.params.projectId);
     projectData = projectData[0];
 
     var member = projectData.projectMembers.filter((members) => {
-      if (members.memberID == req.body.taskOwnerID)
-        return members;
-    })
+      if (members.memberID == req.body.taskOwnerID) return members;
+    });
     const newTask = { ...req.body };
-    member[0].tasks.push(newTask)
-    const assignedTask = member[0]
+    member[0].tasks.push(newTask);
+    const assignedTask = member[0];
 
-    const foundIndex = projectData.projectMembers.findIndex(ele => ele.memberID === assignedTask.memberID)
+    const foundIndex = projectData.projectMembers.findIndex(
+      (ele) => ele.memberID === assignedTask.memberID
+    );
+
     projectData.projectMembers[foundIndex] = assignedTask;
     console.log(projectData.projectMembers[0].tasks);
 
-    //projectdata = we are passing updated project data 
-    const result = await projectService.updateNewTask(projectData, req.params.projectId);
+    //projectdata = we are passing updated project data
+    const result = await projectService.updateNewTask(
+      projectData,
+      req.params.projectId
+    );
     console.log(result);
     if (result.modifiedCount > 0)
-      return await res.status(201). send({ message: "task assigned successfully ", success: true });
-    else
-      return await res.send({ message: "project controller error " });
+      return await res
+        .status(201)
+        .send({ message: "task assigned successfully ", success: true });
+    else return await res.send({ message: "project controller error " });
   } catch (err) {
     return res.status(401).send({ message: err.message });
   }
-}
+};
 
+const addNewTask = async (req, res) => {
+  req.body.taskStatus = "pending"
+
+  // const {error,value} = validate(project)
+
+  return res.send({ message: "add new task" });
+};
 module.exports = {
   addProject,
   getProjectByStatus,
   getProjectByID,
-  updateProject
+  updateProject,
+  addNewTask,
 };
