@@ -1,14 +1,14 @@
-// const validate = require("../Validations/index");
+
 const bcrypt = require("bcrypt");
 const { userCollection } = require("../Models");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv/config");
-const validate = require("../Middlewares/validate");
-const authValidation = require("../Validations/auth.validation");
+const {validate} = require("../Middlewares");
+const {authValidation} = require("../Validations");
 const { user } = require("../services");
 
 const registerUser = async (req, res) => {
-  const { error, value } = validate(authValidation.register)(req.body);
+  const { error, value } = validate.validateJoiSchema(authValidation.register)(req.body);
 
   if (error) {
     return res.status(400).send(error.details[0]);
@@ -45,7 +45,7 @@ const registerUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
 
-  const { error, value } = validate(authValidation.login)(req.body);
+  const { error, value } = validate.validateJoiSchema(authValidation.login)(req.body);
 
   if (error) {
     return res.status(401).send(error.details[0]);

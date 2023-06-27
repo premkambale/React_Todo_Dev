@@ -19,7 +19,7 @@ const userRegistrationSchema = mongoose.Schema({
   },  
   project: [{
     type : mongoose.Schema.Types.ObjectId,
-    ref : 'user'
+    ref : 'project'
   }]
   ,
   date: {

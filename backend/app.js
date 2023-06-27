@@ -7,7 +7,7 @@ const dotenv = require("dotenv/config");
 console.log('IN app.js');
 
 // routes
-const routes = require('./Routes/index.js');
+const routes = require('./Routes');
 
 // middleware 
 app.use(bodyParser.json())      // middleware to converte HTTP req body to json

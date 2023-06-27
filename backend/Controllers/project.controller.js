@@ -1,4 +1,4 @@
-const validate = require("../Middlewares/validate");
+const { validate } = require("../Middlewares");
 const { projectCollection, userCollection } = require("../Models");
 const { projectValidation } = require("../Validations");
 const { user, projectService } = require("../services");
@@ -6,7 +6,7 @@ const { user, projectService } = require("../services");
 const addProject = async (req, res) => {
   try {
     req.body.projectStatus = "pending";
-    const { error, value } = validate(projectValidation.addproject)(req.body);
+    const { error, value } = validate.validateJoiSchema(projectValidation.addproject)(req.body);
 
     if (error)
       return res.status(401).send({ message: error.details[0].message });
@@ -55,7 +55,7 @@ const getProjectByID = async (req, res) => {
 const updateProject = async (req, res) => {
   try {
     req.body.taskStatus = "pending";
-    const { error, value } = validate(projectValidation.assignNewTask)(
+    const { error, value } = validate.validateJoiSchema(projectValidation.assignNewTask)(
       req.body
     );
     if (error)
@@ -96,8 +96,6 @@ const updateProject = async (req, res) => {
 
 const addNewTask = async (req, res) => {
   req.body.taskStatus = "pending"
-
-  // const {error,value} = validate(project)
 
   return res.send({ message: "add new task" });
 };

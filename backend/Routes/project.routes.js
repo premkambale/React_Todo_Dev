@@ -11,5 +11,4 @@ router.route('/project/:projectId').get(projectController.getProjectByID).patch(
 
 router.post('/project/add-task',projectController.addNewTask)
 
-
 module.exports = router;

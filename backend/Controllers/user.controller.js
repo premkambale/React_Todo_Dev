@@ -1,4 +1,4 @@
-const validate = require("../Middlewares/validate");
+const {validate} = require("../Middlewares");
 const { userValidation } = require("../Validations");
 const { user } = require("../services");
 
@@ -11,7 +11,7 @@ const getProfile = async (req, res) => {
 };
 
 const updateProfile = async (req, res) => {
-  const { error, value } = validate(userValidation.updateUser)(req.body);
+  const { error, value } = validate.validateJoiSchema(userValidation.updateUser)(req.body);
   if (error) return res.status(400).send(error);
 
   try {

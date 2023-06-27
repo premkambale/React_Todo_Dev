@@ -1,4 +1,4 @@
-const validate = (schema) => (payload) =>
+const validateJoiSchema = (schema) => (payload) =>
   schema.validate(payload, { abortEarly: false }); // bydefault abortEarly = true
 
-  module.exports = validate;
+  module.exports = {validateJoiSchema};
