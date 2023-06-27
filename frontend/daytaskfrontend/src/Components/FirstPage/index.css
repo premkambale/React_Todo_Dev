@@ -1,0 +1,53 @@
+*{
+   background-color: #212832;
+   max-width: 426px;
+}
+
+@media screen and (max-width: 420px){
+    .logo{
+        position: absolute;
+        width: 100px;
+        height: 70px;
+        left: 26px;
+        top: 23px;
+        }
+        
+        .img{ 
+        position: absolute;
+        width: 350px;
+        height: 320px;
+        left: 26px;
+        top: 123px;
+        margin-bottom: 0;
+        background-color: white;
+        }
+        
+        .text{
+        position: absolute;
+        width: 376px;
+        height: 240px;
+        left: 26px;
+        top: 450px;
+        color:white;
+        font-family: Pilat Extended;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 61px;
+        line-height: 69px;
+        }
+        
+        .button{
+            top:780px;
+            background-color: #FED36A;
+            position:absolute;
+            left: 26px;
+            width: 376px;
+            height: 50px;
+            margin-bottom: 20px;
+            color: #000;
+            font-size: 18px;
+            font-family: Inter;
+            font-weight: 600;
+            line-height: 38px;
+        }
+}

@@ -1,0 +1,29 @@
+*{
+    background-color: #212832;
+    color: aliceblue;
+    /* max-width: 426px; */
+ }
+
+@media screen and (max-width: 420px){
+    .logo{
+        position: absolute;
+        left: 168px;
+        top:40px;
+        width: 91.222px;
+        height: 71.383px;
+        flex-shrink: 0;
+     }
+
+    .welcome-text{
+        color:white;
+        position: absolute;
+        font-size: 26px;
+        font-family: Inter;
+        font-weight: 600;
+        line-height: 15.304px;
+        top:170px;
+        left: 26px;
+        right: 209px;
+        bottom: 731px;
+    }
+}
