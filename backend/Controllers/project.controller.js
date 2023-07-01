@@ -1,6 +1,6 @@
 const { validate } = require("../Middlewares");
 const { projectCollection, userCollection } = require("../Models");
-const { projectValidation } = require("../Validations");
+const { projectValidation, taskValidation } = require("../Validations");
 const { user, projectService } = require("../services");
 
 const addProject = async (req, res) => {
@@ -96,6 +96,11 @@ const updateProject = async (req, res) => {
 
 const addNewTask = async (req, res) => {
   req.body.taskStatus = "pending"
+
+  const {error,value} = validate.validateJoiSchema(taskValidation.taskSchema)(req.body)
+  if (error)
+    return res.status('409').send({message: error.message})
+
 
   return res.send({ message: "add new task" });
 };

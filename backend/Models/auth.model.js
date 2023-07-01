@@ -20,6 +20,10 @@ const userRegistrationSchema = mongoose.Schema({
   project: [{
     type : mongoose.Schema.Types.ObjectId,
     ref : 'project'
+  }],
+  task : [{
+    type : mongoose.Schema.Types.ObjectId,
+    ref : 'task'
   }]
   ,
   date: {
