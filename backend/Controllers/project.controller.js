@@ -13,8 +13,6 @@ const addProject = async (req, res) => {
 
     const newproject = await new projectCollection({
       ...value, //if data changed after validation then data will be ovverride ex: trim
-      isCompleted: false,
-      isPending: true,
       date: new Date(),
     })
       .save()
@@ -25,7 +23,7 @@ const addProject = async (req, res) => {
           await data.save();
           return res
             .status(201)
-            .send({ message: "new Project added successfully" });
+            .send({ message: "new Project added successfully", success: true });
         } else {
           return res.send({ message: "invalid token" });
         }
@@ -52,6 +50,7 @@ const getProjectByID = async (req, res) => {
   return res.send(projectData);
 };
 
+// i think we need to delete this update peoject : lots of confusion is here
 const updateProject = async (req, res) => {
   try {
     req.body.taskStatus = "pending";
@@ -94,20 +93,10 @@ const updateProject = async (req, res) => {
   }
 };
 
-const addNewTask = async (req, res) => {
-  req.body.taskStatus = "pending"
 
-  const {error,value} = validate.validateJoiSchema(taskValidation.taskSchema)(req.body)
-  if (error)
-    return res.status('409').send({message: error.message})
-
-
-  return res.send({ message: "add new task" });
-};
 module.exports = {
   addProject,
   getProjectByStatus,
   getProjectByID,
-  updateProject,
-  addNewTask,
+  updateProject
 };

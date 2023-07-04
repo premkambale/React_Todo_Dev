@@ -4,7 +4,7 @@ const dotenv = require('dotenv/config')
 // verify customers token
 const verifyToken = (req, res, next) => {
   if (req.headers.authorization == undefined)
-    return res.status(401).send({ message: 'user not authorised' })
+    return res.status(401).send({ message: 'user not authorised' })   // if token not authorized in req.body
 
   const authHeader = req.headers.authorization.split(" ")[1];
 

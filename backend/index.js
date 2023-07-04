@@ -1,7 +1,5 @@
 const mongoose = require("mongoose");
-// console.log('in index before - app = require("./app");');
 const app = require("./app");
-// console.log('in index after - app = require("./app");');
 const dotenv = require("dotenv/config");
 var server;
 

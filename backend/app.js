@@ -4,8 +4,6 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const dotenv = require("dotenv/config");
 
-console.log('IN app.js');
-
 // routes
 const routes = require('./Routes');
 

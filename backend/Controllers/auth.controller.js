@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv/config");
 const {validate} = require("../Middlewares");
 const {authValidation} = require("../Validations");
-const { user } = require("../services");
+const { userService } = require("../services");
 
 const registerUser = async (req, res) => {
   const { error, value } = validate.validateJoiSchema(authValidation.register)(req.body);
@@ -16,7 +16,7 @@ const registerUser = async (req, res) => {
 
   // console.log(await user.checkEmailPresent(req));
 
-  if (await user.isEmailPresent(req))
+  if (await userService.isEmailPresent(req))
     return res
       .status(409)
       .send({ message: "user registered already with this email-id" });
@@ -51,7 +51,7 @@ const loginUser = async (req, res) => {
     return res.status(401).send(error.details[0]);
   }
 
-  const userData = await user.isEmailPresent(req);
+  const userData = await userService.isEmailPresent(req);
 
   if (userData) {
     bcrypt.compare(req.body.password, userData.password, (err, data) => {
