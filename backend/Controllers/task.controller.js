@@ -1,6 +1,8 @@
 const { validate } = require("../Middlewares");
 const { taskValidation } = require("../Validations");
-const {taskCollection} = require("../Models")
+const {taskCollection,userCollection} = require("../Models");
+const { projectController, userController } = require(".");
+const { userService } = require("../services");
 
 
 const addNewTask = async (req, res) => {
@@ -14,13 +16,16 @@ const addNewTask = async (req, res) => {
       ...value,
     }).save()
     .then( response=>{
+
+      userService.addTaskID(response.taskOwnerID,response._id)
+
       res.send({
         message : "task assigned successfully",
         success : true
       })
     }).catch(error =>{
       res.send({
-        message : err.message
+        message : error.message
       })
     })
   // return res.send({ message: "add new task remaning" });

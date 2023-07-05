@@ -10,14 +10,6 @@ const projectSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "user"
   }]
-  // }],
-  // memberID: {
-  //   type:mongoose.Schema.Types.ObjectId,
-  //   ref: "user"
-  // },
-  // memberName: String,
-  // profile: String
-
 }, { timestamps: true });
 
 module.exports = mongoose.model("project", projectSchema);
