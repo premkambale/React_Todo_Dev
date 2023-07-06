@@ -34,11 +34,23 @@ const deleteUser = async (req) => {
   });
 };
 
+// add project ID in users peoject[]
+const addTaskID = async (taskOwnerID,taskID) => {
+  return await userCollection.updateOne(
+    { _id: taskOwnerID },
+    {
+      $push: {
+        task : taskID
+      }
+    }
+  );
+}
+
 module.exports = {
   isEmailPresent,
   updateUser,
   deleteUser,
   findAllUsers,
   findUserById,
-  getProjectListByStatus,
+  getProjectListByStatus, addTaskID
 };

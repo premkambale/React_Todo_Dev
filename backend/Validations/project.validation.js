@@ -1,6 +1,7 @@
 const joi = require("joi");
 
 const addproject = joi.object({
+  projectOwnerID: joi.string().required(),
   projectTitle: joi.string().trim().required(),
   projectDescription: joi.string().trim(),
   projectDueDate: joi.date().min("now").required(),

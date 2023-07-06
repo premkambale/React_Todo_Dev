@@ -1,20 +1,18 @@
-const validate = require("../Middlewares/validate");
+const { validate } = require("../Middlewares");
 const { projectCollection, userCollection } = require("../Models");
-const { projectValidation } = require("../Validations");
+const { projectValidation, taskValidation } = require("../Validations");
 const { user, projectService } = require("../services");
 
 const addProject = async (req, res) => {
   try {
     req.body.projectStatus = "pending";
-    const { error, value } = validate(projectValidation.addproject)(req.body);
+    const { error, value } = validate.validateJoiSchema(projectValidation.addproject)(req.body);
 
     if (error)
       return res.status(401).send({ message: error.details[0].message });
 
     const newproject = await new projectCollection({
       ...value, //if data changed after validation then data will be ovverride ex: trim
-      isCompleted: false,
-      isPending: true,
       date: new Date(),
     })
       .save()
@@ -25,7 +23,7 @@ const addProject = async (req, res) => {
           await data.save();
           return res
             .status(201)
-            .send({ message: "new Project added successfully" });
+            .send({ message: "new Project added successfully", success: true });
         } else {
           return res.send({ message: "invalid token" });
         }
@@ -52,10 +50,11 @@ const getProjectByID = async (req, res) => {
   return res.send(projectData);
 };
 
+// i think we need to delete this update peoject : lots of confusion is here
 const updateProject = async (req, res) => {
   try {
     req.body.taskStatus = "pending";
-    const { error, value } = validate(projectValidation.assignNewTask)(
+    const { error, value } = validate.validateJoiSchema(projectValidation.assignNewTask)(
       req.body
     );
     if (error)
@@ -94,17 +93,10 @@ const updateProject = async (req, res) => {
   }
 };
 
-const addNewTask = async (req, res) => {
-  req.body.taskStatus = "pending"
 
-  // const {error,value} = validate(project)
-
-  return res.send({ message: "add new task" });
-};
 module.exports = {
   addProject,
   getProjectByStatus,
   getProjectByID,
-  updateProject,
-  addNewTask,
+  updateProject
 };

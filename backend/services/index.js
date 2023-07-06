@@ -1,4 +1,5 @@
 module.exports ={
-    user : require('./user.services'),
-    projectService : require('./project.service')
+    userService : require('./user.services'),
+    projectService : require('./project.service'),
+    taskService : require('./task.service')
 }

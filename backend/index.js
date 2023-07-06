@@ -1,7 +1,5 @@
 const mongoose = require("mongoose");
-// console.log('in index before - app = require("./app");');
 const app = require("./app");
-// console.log('in index after - app = require("./app");');
 const dotenv = require("dotenv/config");
 var server;
 
@@ -13,7 +11,8 @@ mongoose
       "----------------------------------------------------------------"
     );
     console.log("mongodb connected successfully !!!");
-    server = app.listen(process.env.PORT_NO, () => {});
+    
+    server = app.listen(process.env.PORT_NO, () => {});   // start the server
 
     if (server) {
       console.log(
@@ -30,7 +29,7 @@ mongoose
 // if unhandeled exception occurs then automatically server will close
 
 const exitHandler = () => {
-  if (server) {
+  if (server) {       // if server is started then firstly close the server
     server.close(() => {
       console.warn("Server closed");
       process.exit(1);
