@@ -8,7 +8,7 @@ const routesArr = [{
     path : '/auth',
     route : authRoutes
 },{
-    path : '/user',
+    path : '/users',
     route : userRoutes
 }];
 

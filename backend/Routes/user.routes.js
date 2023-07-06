@@ -3,24 +3,18 @@ const router = express.Router();
 const verifyToken = require("../Middlewares/verifyToken");
 const { userController } = require("../Controllers");
 // const authMiddleware = require('../Middlewares/authMiddleware.js')
-
+const projectRoutes = require('./project.routes')
 router.all("/*", verifyToken);
 
-// get profile data
-// router.get("/profile", userController.getProfile);
+// 
+router.get("/all",userController.getAllUsers);
 
-//update the profile
-// router.patch("/profile", userController.updateProfile);
-
-// delete profile
-// router.delete("/profile", userController.deleteProfile);
-
+router.use('/projects',projectRoutes)
 router
   .route("/profile")
   .get(userController.getProfile)
+  .patch(userController.updateProfile)
   .delete(userController.deleteProfile);
 
-router.route("/profile/:id").patch(userController.updateProfile);
-// router.route("/profile").get(userController.getProfile).patch(userController.updateProfile).delete(userController.deleteProfile);
 
 module.exports = router;

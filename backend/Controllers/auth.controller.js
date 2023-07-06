@@ -1,70 +1,72 @@
-const validate = require("../Validations/index");
+// const validate = require("../Validations/index");
 const bcrypt = require("bcrypt");
-const userDB = require("../Models/authModel");
+const { userCollection } = require("../Models");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv/config");
-// const validateLogin = require("../Validations/login.validation");
+const validate = require("../Middlewares/validate");
+const authValidation = require("../Validations/auth.validation");
+const { user } = require("../services");
 
 const registerUser = async (req, res) => {
-  const { error, value } = validate.registrationValidation(req.body);
+  const { error, value } = validate(authValidation.register)(req.body);
 
   if (error) {
-    return res.status(401).send(error.details[0]);
+    return res.status(400).send(error.details[0]);
   }
 
-  if (await userDB.findOne({ email: req.body.email }))
-    return res.send({ message: "user registered already with this email-id" });
+  // console.log(await user.checkEmailPresent(req));
+
+  if (await user.isEmailPresent(req))
+    return res
+      .status(409)
+      .send({ message: "user registered already with this email-id" });
 
   async function getHashedPassword(password) {
-    const salt = await bcrypt.genSalt(10);
-    return await bcrypt.hash(password, salt);
+    // const salt = await bcrypt.genSalt(10);
+    return await bcrypt.hash(password, 10);
   }
 
-  const newUser = new userDB({
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    password: await getHashedPassword(req.body.password),
-    confirmPassword: req.body.confirmPassword,
-    email: req.body.email,
-    mobileNo: req.body.mobileNo,
-    date: new Date(),
-  });
+  const payload = { ...req.body, ...value, date: new Date() };
+  payload.password = await getHashedPassword(req.body.password);
+
+  const newUser = new userCollection(payload); 
 
   try {
-    var postedUserData = await newUser.save();
-    var data = {
+    await newUser.save();
+
+    res.send({
       message: "user Registered successfully",
       success: true,
-    };
-
-    res.send(data);
+    });
   } catch (err) {
     res.send({ message: err.message });
   }
 };
 
 const loginUser = async (req, res) => {
-  const { error, value } = validate.loginValidation(req.body);
+
+  const { error, value } = validate(authValidation.login)(req.body);
+
   if (error) {
     return res.status(401).send(error.details[0]);
   }
 
-  const userData = await userDB.findOne({ email: req.body.email });
+  const userData = await user.isEmailPresent(req);
 
   if (userData) {
     bcrypt.compare(req.body.password, userData.password, (err, data) => {
-      if (err) return res.send({ err });
+      if (err) return res.send({ message : err.message});
 
       if (data) {
         jwt.sign(
           { id: userData._id },
           process.env.SECRETKEY,
-          { expiresIn: "1h" },
+          { expiresIn: process.env.JWT_EXPIRES_IN },
           (err, token) => {
             userData.password = undefined;
-            userData.mobileNo = undefined
+            userData.mobileNo = undefined;
             if (token) res.json({ success: true, token, userData });
-            else console.log(err);
+            else return res.json({ message: err });
           }
         );
       } else return res.send({ message: "Invalid Password" });
