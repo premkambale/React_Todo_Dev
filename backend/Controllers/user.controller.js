@@ -37,4 +37,18 @@ const deleteProfile = async (req, res) => {
     : res.send({ message: "user not deleted" });
 };
 
-module.exports = { getProfile, updateProfile, deleteProfile };
+
+const getAllUsers = async (req, res) => {
+  const userData = await user.findAllUsers();
+  const filteredUserData = userData.map((userInfo) => {
+    return {
+      memberId: userInfo._id,
+      firstName: userInfo.firstName,
+      lastName: userInfo.lastName,
+      mobileNo: userInfo.mobileNo
+    }
+  })
+  return res.status(200).send(filteredUserData);
+}
+
+module.exports = { getProfile, updateProfile, deleteProfile, getAllUsers };

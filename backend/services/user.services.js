@@ -9,6 +9,11 @@ const findUserById = async (req) => {
   return await userCollection.findOne({ _id: req.user_id });
 };
 
+const findAllUsers = async () => {
+  const allUsers = await userCollection.find();
+  return allUsers;
+}
+
 const updateUser = async (req, value) => {
   return await userCollection.updateOne(
     { _id: req.user_id },
@@ -33,6 +38,7 @@ module.exports = {
   isEmailPresent,
   updateUser,
   deleteUser,
+  findAllUsers,
   findUserById,
   getProjectListByStatus,
 };
