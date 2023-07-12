@@ -28,6 +28,10 @@ const getProjectListByStatus = async (req) => {
   return await projectCollection.find({ projectStatus: req.query.projectStatus });
 };
 
+const getMembersByIds = async (memberIds) => {
+  return await userCollection.find({ '_id': { $in: memberIds } })
+}
+
 const deleteUser = async (req) => {
   return await userDB.userCollection.deleteOne({
     _id: req.user.id,
@@ -35,15 +39,27 @@ const deleteUser = async (req) => {
 };
 
 // add project ID in users peoject[]
-const addTaskID = async (taskOwnerID,taskID) => {
+const addTaskID = async (taskOwnerID, taskID) => {
   return await userCollection.updateOne(
     { _id: taskOwnerID },
     {
       $push: {
-        task : taskID
+        task: taskID
       }
     }
   );
+}
+
+// send Filtered User Records
+const getFilterdMemberData = (members) => {
+  return members.map((userInfo) => {
+    return {
+      memberId: userInfo._id,
+      firstName: userInfo.firstName,
+      lastName: userInfo.lastName,
+      mobileNo: userInfo.mobileNo
+    }
+  })
 }
 
 module.exports = {
@@ -52,5 +68,8 @@ module.exports = {
   deleteUser,
   findAllUsers,
   findUserById,
-  getProjectListByStatus, addTaskID
+  getProjectListByStatus,
+  addTaskID,
+  getMembersByIds,
+  getFilterdMemberData
 };

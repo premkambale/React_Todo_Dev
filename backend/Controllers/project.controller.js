@@ -1,7 +1,8 @@
 const { validate } = require("../Middlewares");
 const { projectCollection, userCollection } = require("../Models");
 const { projectValidation, taskValidation } = require("../Validations");
-const { user, projectService } = require("../services");
+const { projectService, userService } = require("../services");
+const { user } = require('../services/user.services')
 
 const addProject = async (req, res) => {
   try {
@@ -17,7 +18,9 @@ const addProject = async (req, res) => {
     })
       .save()
       .then(async (response) => {
-        const data = await user.findUserById(req);
+        const data = await userService.findUserById(req);
+        console.log('project response:', response)
+
         if (data) {
           data.project.push(response._id);
           await data.save();
