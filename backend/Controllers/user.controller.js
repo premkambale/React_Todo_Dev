@@ -1,12 +1,10 @@
-const {validate} = require("../Middlewares");
+const { validate } = require("../Middlewares");
 const { userValidation } = require("../Validations");
-const { userService } = require("../services");
+const { userService, projectService } = require("../services");
 
 const getProfile = async (req, res) => {
   var userData = await userService.findUserById(req);
-
   userData.password = undefined;
-
   res.status(200).send(userData);
 };
 
@@ -39,16 +37,18 @@ const deleteProfile = async (req, res) => {
 
 
 const getAllUsers = async (req, res) => {
-  const userData = await user.findAllUsers();
-  const filteredUserData = userData.map((userInfo) => {
-    return {
-      memberId: userInfo._id,
-      firstName: userInfo.firstName,
-      lastName: userInfo.lastName,
-      mobileNo: userInfo.mobileNo
-    }
-  })
+  const userData = await userService.findAllUsers();
+  const filteredUserData = userService.getFilterdMemberData(userData);
   return res.status(200).send(filteredUserData);
 }
 
-module.exports = { getProfile, updateProfile, deleteProfile, getAllUsers };
+const getMembersByProjectId = async (req, res) => {
+  const project = await projectService.getProjectByID(req.params.projectId);
+  const memberIds = project[0]?.projectMembers;
+  const members = await userService.getMembersByIds(memberIds);
+  const filteredUserData = userService.getFilterdMemberData(members)
+  return res.status(200).send(filteredUserData);
+}
+
+
+module.exports = { getProfile, updateProfile, deleteProfile, getAllUsers, getMembersByProjectId };

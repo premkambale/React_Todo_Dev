@@ -9,8 +9,9 @@ router.all("/*", verify.verifyToken);
 
 // 
 router.get("/all",userController.getAllUsers);
-
+router.get("/:projectId",userController.getMembersByProjectId)
 router.use('/projects',projectRoutes)
+
 router
   .route("/profile")
   .get(userController.getProfile)
