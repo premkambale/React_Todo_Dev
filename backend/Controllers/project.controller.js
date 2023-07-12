@@ -1,7 +1,7 @@
 const { validate } = require("../Middlewares");
 const { projectCollection, userCollection } = require("../Models");
 const { projectValidation, taskValidation } = require("../Validations");
-const { user, projectService } = require("../services");
+const { userService, projectService } = require("../services");
 
 const addProject = async (req, res) => {
   try {
@@ -17,7 +17,7 @@ const addProject = async (req, res) => {
     })
       .save()
       .then(async (response) => {
-        const data = await user.findUserById(req);
+        const data = await userService.findUserById(req);
         if (data) {
           data.project.push(response._id);
           await data.save();
@@ -37,7 +37,7 @@ const addProject = async (req, res) => {
 };
 const getProjectByStatus = async (req, res) => {
   try {
-    const SortedProjectList = await user.getProjectListByStatus(req);
+    const SortedProjectList = await userService.getProjectListByStatus(req);
 
     res.status(200).send(SortedProjectList);
   } catch (err) {
@@ -92,6 +92,7 @@ const updateProject = async (req, res) => {
     return res.status(401).send({ message: err.message });
   }
 };
+
 
 
 module.exports = {

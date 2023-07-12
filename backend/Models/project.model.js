@@ -9,6 +9,10 @@ const projectSchema = mongoose.Schema({
   projectMembers: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "user"
+  }],
+  tasks: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "task"
   }]
 }, { timestamps: true });
 

@@ -35,12 +35,12 @@ const deleteUser = async (req) => {
 };
 
 // add project ID in users peoject[]
-const addTaskID = async (taskOwnerID,taskID) => {
+const addTaskID = async (taskOwnerID, taskID) => {
   return await userCollection.updateOne(
     { _id: taskOwnerID },
     {
       $push: {
-        task : taskID
+        task: taskID
       }
     }
   );
