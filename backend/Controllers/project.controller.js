@@ -18,6 +18,7 @@ const addProject = async (req, res) => {
       .save()
       .then(async (response) => {
         const data = await userService.findUserById(req);
+
         if (data) {
           data.project.push(response._id);
           await data.save();
