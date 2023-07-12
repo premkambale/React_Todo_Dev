@@ -5,14 +5,14 @@ const userRoutes = require('./user.routes')
 const authRoutes = require('./auth.routes')
 
 const routesArr = [{
-    path : '/auth',
-    route : authRoutes
-},{
+    path: '/auth',
+    route: authRoutes
+}, {
     path : '/users',
     route : userRoutes
 }];
 
-routesArr.map((route)=>{
+routesArr.map((route) => {
     router.use(route.path, route.route);
 })
 
