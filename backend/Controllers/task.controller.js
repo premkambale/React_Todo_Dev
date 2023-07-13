@@ -17,8 +17,8 @@ const addNewTask = async (req, res) => {
   }).save()
     .then(response => {
       userService.addTaskID(response.taskOwnerID, response._id)
-      // projectService.addTaskID()
-      console.log(response);
+      projectService.addTaskID (response.projectID, response._id)
+      // console.log(response);
 
       res.send({
         message: "task assigned successfully",
