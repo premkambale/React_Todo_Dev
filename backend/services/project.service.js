@@ -1,9 +1,10 @@
 const { projectCollection } = require("../Models");
 const getProjectByID = async (projectId) => {
-    // console.log(' projectId : ' ,projectId);
-
-    // check projectId here
-    return await projectCollection.find({ _id: projectId })
+    try{
+        return await projectCollection.find({ _id: projectId }).populate('tasks').exec()
+    }catch (err){
+        console.log(err);
+    }
 }
 
 const updateNewTask = async (updatedProjectData, projectId) => {

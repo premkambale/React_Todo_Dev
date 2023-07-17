@@ -94,8 +94,6 @@ const updateProject = async (req, res) => {
   }
 };
 
-
-
 module.exports = {
   addProject,
   getProjectByStatus,
