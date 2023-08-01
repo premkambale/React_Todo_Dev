@@ -7,10 +7,10 @@ const projectRoutes = require('./project.routes')
 
 router.all("/*", verify.verifyToken);
 
+router.use('/projects',projectRoutes)
 // 
 router.get("/all",userController.getAllUsers);
 router.get("/:projectId",userController.getMembersByProjectId)
-router.use('/projects',projectRoutes)
 
 router
   .route("/profile")
