@@ -1,8 +1,10 @@
 const express = require('express');
-const { taskController, projectController } = require('../Controllers');
 const router = express.Router();
+const { taskController, projectController } = require('../Controllers');
+const taskRoutes = require('./task.routes')
 
-
+// router.use('/task',)
+router.use('/:projectId/task',taskRoutes)
 // get all project according to the status
 router.get('/', projectController.getProjectByStatus)
 // add new project 
@@ -13,7 +15,9 @@ router.route('/project/:projectId').
     patch(projectController.updateProject).
     delete(projectController.deleteProjectByID)
 
-router.post('/project/add-task', taskController.addNewTask)
+
+
+router.post('/project/add-task', )
 
 
 module.exports = router;

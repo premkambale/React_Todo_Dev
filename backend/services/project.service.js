@@ -19,9 +19,14 @@ const addTaskID = async (projectID, taskID) => {
 const deleteProjectByID = async (projectID) => {
     return await projectCollection.deleteOne({ _id: projectID });
 }
+
+const updateProject = async (projectId, payload) => {
+    return await projectCollection.updateOne({ _id: projectId }, { $set: payload })
+}
 module.exports = {
     getProjectByID,
     updateNewTask,
     addTaskID,
-    deleteProjectByID
+    deleteProjectByID,
+    updateProject
 }

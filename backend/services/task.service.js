@@ -8,6 +8,12 @@ const deleteTaskArrayByIDs = async (taskIDsArray) => {
     await taskCollection.deleteMany({ _id: { $in: taskIDsArray } })
 }
 
+// delete 1 task by ID
+const deleteTaskById = async (taskId) => {
+    await taskCollection.deleteOne({ _id: taskId })
+}
+
 module.exports = {
-    deleteTaskArrayByIDs
+    deleteTaskArrayByIDs,
+    deleteTaskById
 }

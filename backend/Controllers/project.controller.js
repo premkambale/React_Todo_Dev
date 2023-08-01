@@ -94,7 +94,23 @@ const getProjectByID = async (req, res) => {
 //   }
 // };
 const updateProject = async (req, res) => {
-  res.send('pending')
+  try {
+
+    req.body.projectStatus = req.body.projectStatus === "completed" ? "completed" : "pending"
+
+    const { error, value } = validate.validateJoiSchema(projectValidation.updateProject)(req.body)
+
+    if (error)
+      return res.status(401).send({ message: error.details[0].message });
+
+    const project = await projectService.updateProject(req.params.projectId, value)
+
+    console.log('updateproject controller', project);
+    res.status(200).send({ message: 'project updated successfully', success: true })
+
+  } catch (err) {
+    console.log(err.message);
+  }
 };
 
 const deleteProjectByID = async (req, res) => {
@@ -106,7 +122,7 @@ const deleteProjectByID = async (req, res) => {
     await taskService.deleteTaskArrayByIDs(taskIDs);
     await projectService.deleteProjectByID(req.params.projectId)
 
-    res.send('deleted')
+    res.send('project deleted successfully')
   } catch (err) {
     console.log(err.message);
   }
