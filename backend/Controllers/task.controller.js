@@ -34,11 +34,11 @@ const addNewTask = async (req, res) => {
   return res.send({ message: "add new task remaning" });
 };
 
-const deleteTaskById = async (req,res)=>{
+const deleteTaskById = async (req, res) => {
   res.send(taskService.deleteTaskById(req.params.taskId))
 }
 
 
 module.exports = {
-  addNewTask,deleteTaskById
+  addNewTask, deleteTaskById
 }
